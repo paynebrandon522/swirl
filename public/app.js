@@ -131,7 +131,8 @@ function showView(name, params = {}) {
     const active =
       v === name ||
       (v === 'menu' && ['category', 'treat'].includes(name)) ||
-      (v === 'create' && name === 'create');
+      (v === 'create' && name === 'create') ||
+      (v === 'play' && ['play', 'game', 'leaderboard'].includes(name));
     btn.classList.toggle('active', active);
   });
 
@@ -1078,6 +1079,198 @@ views.rewards = async (container) => {
       showToast(msg, 'error');
     }
   };
+};
+
+// ============================================================
+// VIEW: GAME LIBRARY (Arcade)
+// ============================================================
+
+views.play = async (container) => {
+  let personalBest = null;
+  try {
+    const pb = await API.get(`/api/games/personal-best/scoop-stack/${currentUser.id}`);
+    personalBest = pb.score;
+  } catch (e) {}
+
+  const games = [
+    { id: 'scoop-stack',   name: 'Scoop Stack',   emoji: '🍦', desc: 'Catch falling scoops to build the tallest stack!', playable: true },
+    { id: 'sprinkle-dash', name: 'Sprinkle Dash', emoji: '✨', desc: 'Race to collect sprinkles before time runs out!', playable: false },
+    { id: 'waffle-crunch', name: 'Waffle Crunch', emoji: '🧇', desc: 'Match three waffle pieces for sweet combos!', playable: false },
+    { id: 'sundae-sunday', name: 'Sundae Sunday', emoji: '🍨', desc: 'Build sundaes to fill customer orders!', playable: false },
+    { id: 'cherry-pop',    name: 'Cherry Pop',    emoji: '🍒', desc: 'Pop cherries before they hit the ground!', playable: false },
+    { id: 'cone-crazy',    name: 'Cone Crazy',    emoji: '🌀', desc: 'Roll your scoop through a twisty cone maze!', playable: false }
+  ];
+
+  container.innerHTML = `
+    <div class="play-page">
+      <div class="play-header">
+        <h1>Arcade 🎮</h1>
+        <p class="play-subtitle">Play games, earn sprinkles!</p>
+      </div>
+      <div class="game-grid">
+        ${games.map(g => `
+          <div class="game-card ${g.playable ? '' : 'game-card-locked'}"
+               ${g.playable ? `onclick="showView('game', { gameId: '${g.id}' })"` : ''}>
+            <div class="game-card-emoji">${g.emoji}</div>
+            <div class="game-card-name">${g.name}</div>
+            <div class="game-card-desc">${g.desc}</div>
+            ${g.playable
+              ? `<button class="btn btn-primary btn-sm" style="width:100%;margin-top:4px">Play!</button>`
+              : `<div class="game-card-locked-badge">🔒 Coming Soon</div>`
+            }
+          </div>
+        `).join('')}
+      </div>
+      ${personalBest !== null ? `
+        <div class="play-personal-best">🏆 Your Scoop Stack best: <strong>${personalBest}</strong></div>
+      ` : ''}
+      <button class="btn btn-outline" onclick="showView('leaderboard')" style="display:block;margin:0 16px 20px;width:calc(100% - 32px)">
+        🏆 Leaderboard
+      </button>
+    </div>
+  `;
+};
+
+// ============================================================
+// VIEW: GAME (Scoop Stack)
+// ============================================================
+
+views.game = (container, { gameId } = {}) => {
+  container.innerHTML = `
+    <div class="game-page">
+      <div class="game-top-bar">
+        <button class="game-back-btn" onclick="showView('play')">← Back</button>
+        <div class="game-hud">
+          <span id="game-score">🍦 0</span>
+          <span id="game-lives">❤️❤️❤️</span>
+        </div>
+      </div>
+      <div class="game-canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+        <div id="game-overlay" class="game-overlay" style="display:none"></div>
+      </div>
+    </div>
+  `;
+
+  const canvas = document.getElementById('game-canvas');
+  const overlay = document.getElementById('game-overlay');
+  const scoreEl = document.getElementById('game-score');
+  const livesEl = document.getElementById('game-lives');
+
+  // Size canvas to fill available space
+  const wrap = document.querySelector('.game-canvas-wrap');
+  const gameWidth = Math.min(wrap.clientWidth, 430);
+  const gameHeight = Math.round(gameWidth * 1.4);
+
+  canvas.width = gameWidth;
+  canvas.height = gameHeight;
+
+  const game = new ScoopGame(canvas, {
+    onScoreUpdate(score) {
+      scoreEl.textContent = '🍦 ' + score;
+    },
+    onLifeLost(livesLeft) {
+      livesEl.textContent = '❤️'.repeat(livesLeft) + '🖤'.repeat(3 - livesLeft);
+    },
+    async onGameOver(finalScore) {
+      // Calculate sprinkles
+      let sprinklesEarned = 0;
+      if (finalScore >= 10) sprinklesEarned = 1;
+      if (finalScore >= 25) sprinklesEarned = 2;
+      if (finalScore >= 50) sprinklesEarned = 3;
+
+      // Submit score
+      let result = {};
+      try {
+        result = await API.post('/api/games/score', {
+          user_id: currentUser.id,
+          game: 'scoop-stack',
+          score: finalScore,
+          sprinkles_earned: sprinklesEarned
+        });
+        currentUser.points = result.new_points;
+        saveUser(currentUser);
+      } catch (e) {}
+
+      overlay.style.display = 'flex';
+      overlay.innerHTML = `
+        <div class="game-over-card">
+          <div class="game-over-emoji">🍦</div>
+          <h2>Game Over!</h2>
+          <div class="game-over-score">${finalScore} scoops</div>
+          ${result.is_personal_best ? '<div class="game-over-badge">🏆 New Personal Best!</div>' : ''}
+          ${result.is_global_best ? '<div class="game-over-badge game-over-badge-gold">👑 New #1 Score!</div>' : ''}
+          ${sprinklesEarned > 0 ? `
+            <div class="game-over-sprinkles">
+              +${sprinklesEarned} sprinkle${sprinklesEarned > 1 ? 's' : ''} earned! ✨
+            </div>
+          ` : `<div class="game-over-no-sprinkles">Catch 10+ scoops to earn sprinkles!</div>`}
+          <button class="btn btn-primary" style="width:100%" onclick="showView('game', { gameId: 'scoop-stack' })">
+            Play Again 🎮
+          </button>
+          <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="showView('play')">
+            Back to Arcade
+          </button>
+        </div>
+      `;
+    }
+  });
+
+  game.start();
+
+  // Cleanup when navigating away
+  const observer = new MutationObserver(() => {
+    if (!document.getElementById('game-canvas')) {
+      game.destroy();
+      observer.disconnect();
+    }
+  });
+  observer.observe(container, { childList: true });
+};
+
+// ============================================================
+// VIEW: LEADERBOARD
+// ============================================================
+
+views.leaderboard = async (container) => {
+  container.innerHTML = `
+    <div class="leaderboard-page">
+      <div class="leaderboard-header">
+        <button class="game-back-btn" onclick="showView('play')">← Back</button>
+        <h1>Leaderboard 🏆</h1>
+        <div style="width:60px"></div>
+      </div>
+      <div id="leaderboard-list" class="leaderboard-list">
+        <p style="padding:40px;text-align:center;color:var(--text-light)">Loading scores... ✨</p>
+      </div>
+    </div>
+  `;
+
+  try {
+    const scores = await API.get('/api/games/leaderboard/scoop-stack');
+    const list = document.getElementById('leaderboard-list');
+    if (!list) return;
+
+    if (!scores.length) {
+      list.innerHTML = '<p style="padding:40px;text-align:center;color:var(--text-light)">No scores yet! Be the first to play! 🎮</p>';
+      return;
+    }
+
+    list.innerHTML = scores.map((s, i) => {
+      const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`;
+      const isMe = s.user_id === currentUser?.id;
+      return `
+        <div class="leaderboard-row ${isMe ? 'leaderboard-row-me' : ''}">
+          <span class="leaderboard-rank">${medal}</span>
+          <span class="leaderboard-name">${s.user_name}${isMe ? ' (you)' : ''}</span>
+          <span class="leaderboard-score">🍦 ${s.score}</span>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    const list = document.getElementById('leaderboard-list');
+    if (list) list.innerHTML = '<p style="padding:24px;text-align:center;color:var(--text-light)">Failed to load leaderboard.</p>';
+  }
 };
 
 // ============================================================
@@ -2453,6 +2646,10 @@ async function initApp() {
     <button class="nav-btn" data-view="cart" onclick="showView('cart')">
       <span class="nav-icon">🛒<span id="cart-count" class="cart-count">0</span></span>
       <span>Cart</span>
+    </button>
+    <button class="nav-btn" data-view="play" onclick="showView('play')">
+      <span class="nav-icon">🎮</span>
+      <span>Play</span>
     </button>
     <button class="nav-btn" data-view="profile" onclick="showView('profile')">
       <span class="nav-icon">👤</span>

@@ -130,6 +130,13 @@ function migrateDb(db) {
   if (!db.redemptions) { db.redemptions = []; changed = true; }
   if (!db.reviews) { db.reviews = []; changed = true; }
 
+  if (!db.high_scores) {
+    db.high_scores = [];
+    db._sequences = db._sequences || {};
+    if (!db._sequences.high_scores) db._sequences.high_scores = 0;
+    changed = true;
+  }
+
   if (changed) writeDb(db);
   return db;
 }
@@ -186,7 +193,8 @@ function seedDb() {
       twilio_to_number: '',
       twilio_enabled: false
     },
-    _sequences: { users: 4, menu_items: 9, orders: 0, order_items: 0, inventory: 23, rewards: 8, redemptions: 0, reviews: 0 }
+    high_scores: [],
+    _sequences: { users: 4, menu_items: 9, orders: 0, order_items: 0, inventory: 23, rewards: 8, redemptions: 0, reviews: 0, high_scores: 0 }
   };
   writeDb(db);
   return db;
@@ -934,6 +942,88 @@ app.put('/api/settings', (req, res) => {
 
   writeDb(db);
   res.json({ success: true });
+});
+
+// ============================================================
+// MINI GAMES
+// ============================================================
+
+// Submit a game score and award sprinkles
+app.post('/api/games/score', (req, res) => {
+  const { user_id, game, score, sprinkles_earned } = req.body;
+  if (!user_id || !game || score === undefined) {
+    return res.status(400).json({ error: 'user_id, game, and score are required' });
+  }
+
+  const db = readDb();
+  const userIdx = db.users.findIndex(u => u.id === user_id);
+  if (userIdx < 0) return res.status(404).json({ error: 'User not found' });
+
+  const earned = Math.max(0, Math.min(3, sprinkles_earned || 0));
+  db.users[userIdx].points += earned;
+
+  const id = ++db._sequences.high_scores;
+  const record = { id, user_id, game, score, sprinkles_earned: earned, created_at: new Date().toISOString() };
+  db.high_scores.push(record);
+
+  // Check if personal/global best
+  const userScores = db.high_scores.filter(s => s.user_id === user_id && s.game === game);
+  const allScores  = db.high_scores.filter(s => s.game === game);
+  const isPersonalBest = userScores.every(s => score >= s.score);
+  const isGlobalBest   = allScores.every(s => score >= s.score);
+
+  writeDb(db);
+  res.json({
+    success: true,
+    new_points: db.users[userIdx].points,
+    high_score_id: id,
+    is_personal_best: isPersonalBest,
+    is_global_best: isGlobalBest
+  });
+});
+
+// Get top 20 leaderboard for a game
+app.get('/api/games/leaderboard/:game', (req, res) => {
+  const db = readDb();
+  const game = req.params.game;
+
+  // Get best score per user
+  const bestByUser = {};
+  for (const s of db.high_scores.filter(h => h.game === game)) {
+    if (!bestByUser[s.user_id] || s.score > bestByUser[s.user_id].score) {
+      bestByUser[s.user_id] = s;
+    }
+  }
+
+  const sorted = Object.values(bestByUser)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 20);
+
+  const leaderboard = sorted.map((s, i) => {
+    const user = db.users.find(u => u.id === s.user_id);
+    return {
+      rank: i + 1,
+      user_id: s.user_id,
+      user_name: user ? user.name : 'Unknown',
+      score: s.score,
+      created_at: s.created_at
+    };
+  });
+
+  res.json(leaderboard);
+});
+
+// Get a user's personal best for a game
+app.get('/api/games/personal-best/:game/:userId', (req, res) => {
+  const db = readDb();
+  const game = req.params.game;
+  const userId = parseInt(req.params.userId);
+
+  const userScores = db.high_scores.filter(s => s.user_id === userId && s.game === game);
+  if (!userScores.length) return res.json({ score: null });
+
+  const best = userScores.reduce((a, b) => a.score > b.score ? a : b);
+  res.json({ score: best.score, created_at: best.created_at });
 });
 
 // ============================================================

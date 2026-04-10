@@ -2090,3 +2090,295 @@ body {
   margin-bottom: 12px;
 }
 }
+
+/* ============================================================
+   MINI GAMES — ARCADE
+   ============================================================ */
+
+/* 5-tab nav adjustment */
+.nav-btn span:not(.nav-icon):not(.cart-count) {
+  font-size: 10px;
+}
+
+/* ── Game Library ── */
+.play-page {
+  padding-bottom: 24px;
+  min-height: 100dvh;
+}
+
+.play-header {
+  background: linear-gradient(180deg, #F5E6FF, var(--cream));
+  padding: 36px 20px 20px;
+  text-align: center;
+}
+
+.play-header h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  color: var(--text);
+  margin: 0;
+}
+
+.play-subtitle {
+  font-size: 14px;
+  color: var(--text-light);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 16px;
+}
+
+.game-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 18px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid var(--cream-dark);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.game-card:active { transform: scale(0.97); }
+
+.game-card-locked {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+  filter: grayscale(0.3);
+}
+
+.game-card-emoji { font-size: 40px; line-height: 1; }
+
+.game-card-name {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.game-card-desc {
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.game-card-locked-badge {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-light);
+  background: var(--cream-dark);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  margin-top: 4px;
+}
+
+.play-personal-best {
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-mid);
+  font-weight: 700;
+  padding: 12px 16px;
+}
+
+/* ── Game Page ── */
+.game-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 74px);
+  overflow: hidden;
+  background: #1a0a2e;
+}
+
+.game-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(0,0,0,0.3);
+}
+
+.game-back-btn {
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'Nunito', sans-serif;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+
+.game-hud {
+  display: flex;
+  gap: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Fredoka', sans-serif;
+  color: white;
+}
+
+.game-canvas-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#game-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  touch-action: none;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(26, 10, 46, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+}
+
+.game-over-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  width: 100%;
+  max-width: 320px;
+  box-shadow: 0 8px 40px rgba(255, 79, 175, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.game-over-emoji { font-size: 56px; }
+
+.game-over-card h2 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  color: var(--text);
+  margin: 0;
+}
+
+.game-over-score {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 42px;
+  color: var(--pink);
+  font-weight: 700;
+}
+
+.game-over-badge {
+  background: var(--lavender-light);
+  color: var(--lavender-dark);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 4px 16px;
+  border-radius: var(--radius-pill);
+}
+
+.game-over-badge-gold {
+  background: linear-gradient(135deg, #FFF3B0, #FFD700);
+  color: #6B4A00;
+}
+
+.game-over-sprinkles {
+  font-size: 18px;
+  font-weight: 800;
+  color: #856100;
+  background: linear-gradient(135deg, #FFF8CC, #FFE680);
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+}
+
+.game-over-no-sprinkles {
+  font-size: 13px;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+/* ── Leaderboard ── */
+.leaderboard-page {
+  padding-bottom: 24px;
+  min-height: 100dvh;
+}
+
+.leaderboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: linear-gradient(180deg, #F5E6FF, var(--cream));
+}
+
+.leaderboard-header h1 {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  color: var(--text);
+  margin: 0;
+}
+
+.leaderboard-list {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.leaderboard-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-sm);
+  border: 2px solid transparent;
+}
+
+.leaderboard-row-me {
+  border-color: var(--pink-light);
+  background: var(--pink-pale);
+}
+
+.leaderboard-rank {
+  font-size: 20px;
+  min-width: 36px;
+  text-align: center;
+  font-weight: 800;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.leaderboard-name {
+  flex: 1;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+
+.leaderboard-score {
+  font-weight: 800;
+  font-size: 15px;
+  color: var(--pink);
+  font-family: 'Fredoka', sans-serif;
+}
