@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FF4FAF"/>
+      <stop offset="100%" stop-color="#C084FC"/>
+    </linearGradient>
+    <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8C070"/>
+      <stop offset="100%" stop-color="#B8852C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rounded square background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- Waffle cone -->
+  <polygon points="196,280 316,280 276,440 236,440" fill="url(#cone)"/>
+  <!-- Cone crosshatch lines -->
+  <g stroke="#A0702A" stroke-width="3" opacity="0.5">
+    <line x1="206" y1="300" x2="270" y2="430"/>
+    <line x1="230" y1="285" x2="278" y2="420"/>
+    <line x1="260" y1="282" x2="242" y2="435"/>
+    <line x1="300" y1="285" x2="248" y2="435"/>
+    <line x1="290" y1="300" x2="238" y2="430"/>
+  </g>
+
+  <!-- Bottom scoop — Strawberry pink -->
+  <circle cx="256" cy="248" r="62" fill="#FF8FAF"/>
+  <circle cx="240" cy="232" r="22" fill="#FFC0D4" opacity="0.6"/>
+
+  <!-- Middle scoop — Mint -->
+  <circle cx="256" cy="172" r="56" fill="#7FDFB0"/>
+  <circle cx="242" cy="158" r="18" fill="#B0F0D0" opacity="0.6"/>
+  <!-- Mint chips -->
+  <rect x="270" y="165" width="8" height="5" rx="2" fill="#5AB888" transform="rotate(20 274 167)"/>
+  <rect x="238" y="180" width="7" height="4" rx="2" fill="#5AB888" transform="rotate(-15 241 182)"/>
+  <rect x="260" y="185" width="6" height="4" rx="2" fill="#5AB888" transform="rotate(35 263 187)"/>
+
+  <!-- Top scoop — Vanilla -->
+  <circle cx="256" cy="104" r="50" fill="#FFF5CC"/>
+  <circle cx="244" cy="90" r="16" fill="#FFFDE8" opacity="0.7"/>
+
+  <!-- Sparkles -->
+  <g fill="#FFD700">
+    <polygon points="380,90 386,108 404,108 390,120 395,138 380,126 365,138 370,120 356,108 374,108" opacity="0.9"/>
+    <polygon points="140,140 144,152 156,152 147,160 150,172 140,164 130,172 133,160 124,152 136,152" opacity="0.7" transform="scale(0.8) translate(22 22)"/>
+    <polygon points="400,200 403,208 412,208 405,214 408,222 400,216 392,222 395,214 388,208 397,208" opacity="0.6"/>
+  </g>
+
+  <!-- Tiny cherry on top -->
+  <circle cx="256" cy="52" r="14" fill="#FF4060"/>
+  <circle cx="252" cy="46" r="5" fill="#FF8090" opacity="0.7"/>
+  <path d="M256,52 Q262,30 272,28" stroke="#34D399" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
