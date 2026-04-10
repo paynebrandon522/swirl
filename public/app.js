@@ -599,15 +599,15 @@ views.create = async (container) => {
     let content = '';
 
     if (currentStep === 'vessel') {
+      const vesselChoices = ['Cup', 'Waffle Cone'];
       content = `
         <h2>Pick your vessel! 🥤</h2>
-        <p>Cup, cone, or waffle cone?</p>
-        <div class="build-options-grid">
-          ${vessels.map(v => `
-            <button class="build-big-btn ${s.vessel === v ? 'active' : ''}"
+        <div class="vessel-stack">
+          ${vesselChoices.map(v => `
+            <button class="vessel-big ${s.vessel === v ? 'active' : ''}"
               onclick="buildSet('vessel','${v}');buildNext()">
-              <span class="big-emoji">${vesselEmoji[v] || '🥤'}</span>
-              <span>${v}</span>
+              <span class="vessel-emoji">${vesselEmoji[v] || '🥤'}</span>
+              <span class="vessel-label">${v}</span>
             </button>
           `).join('')}
         </div>
