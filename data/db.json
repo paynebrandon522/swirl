@@ -1,0 +1,333 @@
+{
+  "users": [
+    {
+      "id": 5,
+      "first_name": "Brandon",
+      "last_name": "Payne",
+      "username": "bpayne",
+      "password": "9969",
+      "name": "Brandon Payne",
+      "points": 400,
+      "is_admin": true
+    },
+    {
+      "id": 6,
+      "first_name": "Navy",
+      "last_name": "Myler",
+      "username": "navy",
+      "password": "9134",
+      "name": "Navy Myler",
+      "points": 10,
+      "is_admin": true
+    },
+    {
+      "id": 7,
+      "first_name": "Tati",
+      "last_name": "Payne",
+      "username": "tater tot",
+      "password": "3333",
+      "name": "Tati Payne",
+      "points": 0,
+      "is_admin": false
+    },
+    {
+      "id": 8,
+      "first_name": "Daddy",
+      "last_name": "",
+      "username": "daddy",
+      "password": "9134",
+      "name": "Daddy",
+      "points": 0,
+      "is_admin": false
+    },
+    {
+      "id": 9,
+      "first_name": "Mommy",
+      "last_name": "Myler",
+      "username": "mommymyler",
+      "password": "9134",
+      "name": "Mommy Myler",
+      "points": 0,
+      "is_admin": false
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Classic Scoops",
+      "emoji": "🍦",
+      "sort_order": 1
+    },
+    {
+      "id": 2,
+      "name": "Sundaes",
+      "emoji": "🍨",
+      "sort_order": 2
+    },
+    {
+      "id": 3,
+      "name": "Shakes",
+      "emoji": "🥤",
+      "sort_order": 3
+    }
+  ],
+  "menu_items": [
+    {
+      "id": 10,
+      "category_id": 1,
+      "name": "Peep perfect",
+      "description": "",
+      "emoji": "🐰",
+      "is_available": false,
+      "sort_order": 1,
+      "price": 5,
+      "default_temperature": "Cup",
+      "default_milk": "Strawberry",
+      "default_creamer": "Strawberry",
+      "default_syrups": [
+        "Rainbow Sprinkles"
+      ],
+      "default_extras": [],
+      "ingredient_ids": []
+    },
+    {
+      "id": 11,
+      "category_id": 1,
+      "name": "Kiko cup",
+      "description": "Dog treats",
+      "emoji": "🐶",
+      "is_available": true,
+      "sort_order": 1,
+      "price": 3,
+      "default_temperature": "Cup",
+      "default_milk": "Vanilla",
+      "default_creamer": null,
+      "default_syrups": [],
+      "default_extras": [
+        "Crushed Nuts"
+      ],
+      "ingredient_ids": []
+    }
+  ],
+  "orders": [
+    {
+      "id": 14,
+      "user_id": 6,
+      "points_earned": 10,
+      "total": 3,
+      "status": "pending",
+      "notes": "",
+      "created_at": "2026-04-10T02:55:45.109Z"
+    }
+  ],
+  "order_items": [
+    {
+      "id": 18,
+      "order_id": 14,
+      "menu_item_id": 11,
+      "item_name": "Kiko cup",
+      "size": "Cup",
+      "milk": "Vanilla",
+      "creamer": null,
+      "syrups": "[\"Rainbow Sprinkles\"]",
+      "extras": null,
+      "is_custom": false
+    }
+  ],
+  "_sequences": {
+    "users": 9,
+    "menu_items": 12,
+    "orders": 14,
+    "order_items": 18,
+    "inventory": 26,
+    "rewards": 8,
+    "redemptions": 8,
+    "reviews": 1
+  },
+  "settings": {
+    "custom_order_price": 2.5,
+    "twilio_account_sid": "",
+    "twilio_auth_token": "",
+    "twilio_from_number": "",
+    "twilio_to_number": "",
+    "twilio_enabled": false
+  },
+  "inventory": [
+    {
+      "id": 1,
+      "name": "Vanilla",
+      "category": "Flavors",
+      "in_stock": true
+    },
+    {
+      "id": 2,
+      "name": "Chocolate",
+      "category": "Flavors",
+      "in_stock": true
+    },
+    {
+      "id": 3,
+      "name": "Strawberry",
+      "category": "Flavors",
+      "in_stock": true
+    },
+    {
+      "id": 4,
+      "name": "Birthday Cake",
+      "category": "Flavors",
+      "in_stock": true
+    },
+    {
+      "id": 7,
+      "name": "Cookies & Cream",
+      "category": "Flavors",
+      "in_stock": true
+    },
+    {
+      "id": 14,
+      "name": "Rainbow Sprinkles",
+      "category": "Toppings",
+      "in_stock": true
+    },
+    {
+      "id": 15,
+      "name": "Chocolate Sprinkles",
+      "category": "Toppings",
+      "in_stock": true
+    },
+    {
+      "id": 16,
+      "name": "Gummy Bears",
+      "category": "Toppings",
+      "in_stock": true
+    },
+    {
+      "id": 18,
+      "name": "M&M's",
+      "category": "Toppings",
+      "in_stock": true
+    },
+    {
+      "id": 19,
+      "name": "Whipped Cream",
+      "category": "Extras",
+      "in_stock": true
+    },
+    {
+      "id": 23,
+      "name": "Waffle Cones",
+      "category": "Supplies",
+      "in_stock": true
+    },
+    {
+      "id": 24,
+      "name": "Peeps",
+      "category": "Extras",
+      "in_stock": true
+    },
+    {
+      "id": 26,
+      "name": "Caramel",
+      "category": "Sauces",
+      "in_stock": true
+    }
+  ],
+  "rewards": [
+    {
+      "id": 1,
+      "name": "Free Topping Upgrade",
+      "emoji": "🎯",
+      "description": "Add any extra topping to your next order — on the house!",
+      "points_cost": 25,
+      "is_available": true
+    },
+    {
+      "id": 2,
+      "name": "Rainbow Sticker Pack",
+      "emoji": "🌈",
+      "description": "A fun pack of rainbow stickers for your notebook or water bottle!",
+      "points_cost": 50,
+      "is_available": false
+    },
+    {
+      "id": 3,
+      "name": "Candy Surprise Bag",
+      "emoji": "🍬",
+      "description": "A mystery bag of assorted candy — no two bags are the same!",
+      "points_cost": 75,
+      "is_available": true
+    },
+    {
+      "id": 4,
+      "name": "Free Scoop",
+      "emoji": "🍦",
+      "description": "A free scoop of any flavor, any cone — your choice!",
+      "points_cost": 100,
+      "is_available": true
+    },
+    {
+      "id": 5,
+      "name": "Fidget Toy",
+      "emoji": "🪀",
+      "description": "A fun fidget spinner, pop-it, or cube — great for busy hands!",
+      "points_cost": 150,
+      "is_available": false
+    },
+    {
+      "id": 6,
+      "name": "Mini Art Kit",
+      "emoji": "🎨",
+      "description": "A set of colored pencils and a cute mini sketchbook!",
+      "points_cost": 200,
+      "is_available": true
+    },
+    {
+      "id": 7,
+      "name": "Mini Stuffed Animal",
+      "emoji": "🧸",
+      "description": "A cute little stuffed friend to take home — surprise selection!",
+      "points_cost": 300,
+      "is_available": true
+    },
+    {
+      "id": 8,
+      "name": "Swirl VIP Crown",
+      "emoji": "👑",
+      "description": "Wear the official Swirl crown for the day. You are royalty!",
+      "points_cost": 500,
+      "is_available": true
+    }
+  ],
+  "redemptions": [
+    {
+      "id": 1,
+      "user_id": 5,
+      "reward_id": 3,
+      "reward_name": "Candy Surprise Bag",
+      "reward_emoji": "🍬",
+      "points_spent": 75,
+      "created_at": "2026-04-10T02:22:57.831Z",
+      "status": "completed"
+    },
+    {
+      "id": 2,
+      "user_id": 5,
+      "reward_id": 1,
+      "reward_name": "Free Topping Upgrade",
+      "reward_emoji": "🎯",
+      "points_spent": 25,
+      "created_at": "2026-04-10T02:23:09.892Z",
+      "status": "completed"
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "order_id": 14,
+      "user_id": 6,
+      "rating": 4,
+      "comment": "It was delicious!!",
+      "created_at": "2026-04-10T02:55:57.066Z"
+    }
+  ]
+}

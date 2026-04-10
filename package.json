@@ -1,0 +1,13 @@
+{
+  "name": "swirl-ice-cream",
+  "version": "1.0.0",
+  "description": "Swirl — Your magical ice cream shop ✨🍦",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "node-notifier": "^10.0.1"
+  }
+}
